@@ -18,7 +18,7 @@ import resource._
 
 object Main extends App {
 
-  case class Config(volumes: Iterator[String], scriptFile: File)
+  case class Config(volumes: TraversableOnce[String], scriptFile: File)
 
   def loadConfiguration(configFile: String): Try[Config] = Try {
     val props = new Properties()
@@ -30,40 +30,45 @@ object Main extends App {
     )
   }
 
+  def generateRsyncScript(volIds: TraversableOnce[String]): String = {
+    // convert the volume ID list to EF paths
+    val volPaths = volIds
+      .map(PairtreeHelper.getDocFromUncleanId)
+      .map(d => s"${d.getDocumentRootPath}/${d.getCleanId}.json.bz2")
+      .mkString("\n")
+
+    val script =
+      s"""
+        |#!/bin/bash
+        |
+        |CWD=$$(pwd)
+        |read -e -p "Enter the folder where to save the Extracted Features files: [$$CWD] " DEST
+        |DEST=$${DEST:-$$CWD}
+        |
+        |if [ ! -d "$$DEST" ]; then
+        |   read -e -p "Folder [$$DEST] does not exist - create? [Y/n] " YN
+        |   YN=$${YN:-Y}
+        |   case $$YN in
+        |      [yY][eE][sS]|[yY])
+        |         mkdir -p "$$DEST" || exit $$?
+        |         ;;
+        |      *)
+        |         echo "Aborting."
+        |         exit 2
+        |         ;;
+        |   esac
+        |fi
+        |
+        |cat << EOF | rsync -v --stats --files-from=- data.analytics.hathitrust.org::pd-features "$$DEST"
+        |$volPaths
+        |EOF
+      """.stripMargin.trim
+
+    script
+  }
+
   val config = loadConfiguration("collection.properties").get
-
-  // convert the volume ID list to EF paths
-  val volPaths = config.volumes
-    .map(PairtreeHelper.getDocFromUncleanId)
-    .map(_.getDocumentPathPrefix + ".json.bz2")
-    .mkString("\n")
-
-  val script =
-    s"""
-      |#!/bin/bash
-      |
-      |CWD=$$(pwd)
-      |read -e -p "Enter the folder where to save the Extracted Features files: [$$CWD] " DEST
-      |DEST=$${DEST:-$$CWD}
-      |
-      |if [ ! -d "$$DEST" ]; then
-      |   read -e -p "Folder [$$DEST] does not exist - create? [Y/n] " YN
-      |   YN=$${YN:-Y}
-      |   case $$YN in
-      |      [yY][eE][sS]|[yY])
-      |         mkdir -p "$$DEST" || exit $$?
-      |         ;;
-      |      *)
-      |         echo "Aborting."
-      |         exit 2
-      |         ;;
-      |   esac
-      |fi
-      |
-      |cat << EOF | rsync -v --stats --files-from=- data.analytics.hathitrust.org::pd-features "$$DEST"
-      |$volPaths
-      |EOF
-    """.stripMargin.trim
+  val script = generateRsyncScript(config.volumes)
 
   for (writer <- managed(new PrintWriter(config.scriptFile)))
     writer.write(script)
