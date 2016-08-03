@@ -4,8 +4,9 @@ import java.io.{File, FileInputStream, PrintWriter}
 import java.util.Properties
 
 import edu.illinois.i3.htrc.tools.PairtreeHelper
+import org.rogach.scallop.ScallopConf
 
-import scala.io.Source
+import scala.io.{Source, StdIn}
 import scala.util.Try
 import resource._
 
@@ -67,9 +68,58 @@ object Main extends App {
     script
   }
 
-  val config = loadConfiguration("collection.properties").get
+  // get configuration either from the 'collection.properties' file (if no command line argument
+  // is provided), or from the command line
+  val config =
+    if (args.isEmpty)
+      loadConfiguration("collection.properties").get
+    else {
+      val conf = new Conf(args)
+      val outputFile = conf.outputFile()
+      val htids = conf.htids.toOption match {
+        case Some(file) => Source.fromFile(file).getLines()
+        case None => Iterator.continually(StdIn.readLine()).takeWhile(_ != null)
+      }
+      Config(htids, outputFile)
+    }
+
   val script = generateRsyncScript(config.volumes)
 
   for (writer <- managed(new PrintWriter(config.scriptFile)))
     writer.write(script)
+}
+
+
+/**
+  * Command line argument configuration
+  *
+  * @param arguments The cmd line args
+  */
+class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
+  val (appTitle, appVersion, appVendor) = {
+    val p = getClass.getPackage
+    val nameOpt = Option(p).flatMap(p => Option(p.getImplementationTitle))
+    val versionOpt = Option(p).flatMap(p => Option(p.getImplementationVersion))
+    val vendorOpt = Option(p).flatMap(p => Option(p.getImplementationVendor))
+    (nameOpt, versionOpt, vendorOpt)
+  }
+
+  version(appTitle.flatMap(
+    name => appVersion.flatMap(
+      version => appVendor.map(
+        vendor => s"$name $version\n$vendor"))).getOrElse("htrc-ef-rsyncgenerator"))
+
+  val outputFile = opt[File]("output",
+    descr = "Writes the generated rsync script to FILE",
+    required = true,
+    argName = "FILE"
+  )
+
+  val htids = trailArg[File]("ids",
+    descr = "The file containing the list of HT IDs to rsync (if omitted, will read from stdin)",
+    required = false
+  )
+
+  validateFileExists(htids)
+  verify()
 }

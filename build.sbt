@@ -25,13 +25,14 @@ lazy val `htrc-ef-rsyncgenerator` = (project in file(".")).
   settings(commonSettings: _*).
   settings(
     name := "htrc-ef-rsyncgenerator",
-    version := "1.1",
+    version := "1.2",
     description :=
       "Generates a shell script that allows one to download the extracted features " +
       "files for the volumes of a given workset.",
     licenses += "Apache2" -> url("http://www.apache.org/licenses/LICENSE-2.0"),
     libraryDependencies ++= Seq(
       "edu.illinois.i3.htrc.tools"    %  "htrc-pairtree-helper" % "2.0",
+      "org.rogach"                    %% "scallop"              % "2.0.0",
       "com.jsuereth"                  %% "scala-arm"            % "1.4",
       "org.scalatest"                 %% "scalatest"            % "2.2.6"      % Test
     ),
