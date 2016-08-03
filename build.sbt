@@ -25,7 +25,7 @@ lazy val `htrc-ef-rsyncgenerator` = (project in file(".")).
   settings(commonSettings: _*).
   settings(
     name := "htrc-ef-rsyncgenerator",
-    version := "1.1-SNAPSHOT",
+    version := "1.1",
     description :=
       "Generates a shell script that allows one to download the extracted features " +
       "files for the volumes of a given workset.",
