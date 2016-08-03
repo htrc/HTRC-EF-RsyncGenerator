@@ -33,7 +33,7 @@ object Main extends App {
 
   def generateRsyncScript(volIds: TraversableOnce[String]): String = {
     // convert the volume ID list to EF paths
-    val volPaths = volIds
+    val volPaths = volIds.toSet[String]
       .map(PairtreeHelper.getDocFromUncleanId)
       .map(d => s"${d.getDocumentRootPath}/${d.getCleanId}.json.bz2")
       .mkString("\n")
