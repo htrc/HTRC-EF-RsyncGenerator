@@ -27,7 +27,7 @@ lazy val `rsync-generator` = (project in file(".")).
   settings(commonSettings: _*).
   settings(
     name := "rsync-generator",
-    version := "2.0-SNAPSHOT",
+    version := "2.0",
     description :=
       "Generates a shell script that allows one to download the extracted features " +
       "files for the volumes of a given workset.",
