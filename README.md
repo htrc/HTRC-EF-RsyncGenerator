@@ -16,7 +16,7 @@ files for a given set of volume IDs.
 The rsync generator tool can be configured to run in two ways:
 * Using file `collection.properties` as input  
   
-  `java -jar htrc-ef-rsyncgenerator-<VERSION>.jar`  
+  `java -jar rsync-generator-<VERSION>.jar`  
   
   By not specifying a command line argument, the tool expects that a file called 
   `collection.properties` exists in the current folder, containing configuration information.
@@ -34,7 +34,7 @@ The rsync generator tool can be configured to run in two ways:
 * Using command line arguments
   
   ```
-  htrc-ef-rsyncgenerator
+  rsync-generator
   HathiTrust Research Center
     -o, --output  <FILE>   Writes the generated rsync script to FILE
         --help             Show help message
