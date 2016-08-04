@@ -1,9 +1,9 @@
-package edu.illinois.i3.htrc.tools.efrsyncgenerator
+package org.hathitrust.htrc.tools.rsyncgenerator
 
 import java.io.{File, FileInputStream, PrintWriter}
 import java.util.Properties
 
-import edu.illinois.i3.htrc.tools.PairtreeHelper
+import org.hathitrust.htrc.tools.pairtreehelper.PairtreeHelper
 import org.rogach.scallop.ScallopConf
 
 import scala.io.{Source, StdIn}
