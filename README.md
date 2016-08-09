@@ -6,6 +6,8 @@ files for a given set of volume IDs.
 * To generate a "fat" runnable JAR  
   `sbt clean assembly`  
   and look for it in `target/scala-2.11/` folder.
+
+  *Note:* you can run the JAR via the usual: `java -jar JARFILE`
   
 * To generate a package that can be invoked via a shell script  
   `sbt stage`  
