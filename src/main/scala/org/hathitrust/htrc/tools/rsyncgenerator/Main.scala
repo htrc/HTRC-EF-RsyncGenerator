@@ -60,7 +60,7 @@ object Main extends App {
         |   esac
         |fi
         |
-        |cat << EOF | rsync -avh --stats --files-from=- data.analytics.hathitrust.org::pd-features "$$DEST"
+        |cat << EOF | rsync -avh --no-perms --no-owner --stats --files-from=- data.analytics.hathitrust.org::pd-features "$$DEST"
         |$volPaths
         |EOF
       """.stripMargin.trim
