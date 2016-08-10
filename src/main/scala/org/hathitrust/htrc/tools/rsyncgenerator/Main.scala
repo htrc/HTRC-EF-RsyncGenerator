@@ -60,7 +60,7 @@ object Main extends App {
         |   esac
         |fi
         |
-        |cat << EOF | rsync -v --stats --files-from=- data.analytics.hathitrust.org::pd-features "$$DEST"
+        |cat << EOF | rsync -avh --no-perms --no-owner --stats --files-from=- data.analytics.hathitrust.org::pd-features "$$DEST"
         |$volPaths
         |EOF
       """.stripMargin.trim
@@ -107,7 +107,7 @@ class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
   version(appTitle.flatMap(
     name => appVersion.flatMap(
       version => appVendor.map(
-        vendor => s"$name $version\n$vendor"))).getOrElse("htrc-ef-rsyncgenerator"))
+        vendor => s"$name $version\n$vendor"))).getOrElse("rsync-generator"))
 
   val outputFile = opt[File]("output",
     descr = "Writes the generated rsync script to FILE",
