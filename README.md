@@ -5,7 +5,7 @@ files for a given set of volume IDs.
 # Build
 * To generate a "fat" runnable JAR  
   `sbt clean assembly`  
-  and look for it in `target/scala-2.11/` folder.
+  and look for it in `target/scala-2.12/` folder.
 
   *Note:* you can run the JAR via the usual: `java -jar JARFILE`
   
@@ -28,6 +28,8 @@ The rsync generator tool can be configured to run in two ways:
   collectionLocation = workset_ids.txt
   outputDir = /tmp/files
   outputFile = EF_Rsync.sh
+  dataset = features-2018.01
+  format = pairtree
   ```
 
   With this configuration file, the tool generates a script file called `EF_Rsync.sh` that 
@@ -36,13 +38,15 @@ The rsync generator tool can be configured to run in two ways:
 * Using command line arguments
   
   ```
-  rsync-generator
-  HathiTrust Research Center
-    -o, --output  <FILE>   Writes the generated rsync script to FILE
-        --help             Show help message
-        --version          Show version of this program
-  
-   trailing arguments:
-    ids (not required)   The file containing the list of HT IDs to rsync (if
-                         omitted, will read from stdin)
+rsync-generator
+HathiTrust Research Center
+  -d, --dataset  <arg>   The name of the dataset to rsync from
+  -f, --format  <arg>    The output format (one of 'pairtree' or 'stubby')
+  -o, --output  <FILE>   Writes the generated rsync script to FILE
+  -h, --help             Show help message
+  -v, --version          Show version of this program
+
+ trailing arguments:
+  ids (not required)   The file containing the list of HT IDs to rsync (if
+                       omitted, will read from stdin)
   ```
