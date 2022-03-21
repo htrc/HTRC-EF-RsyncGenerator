@@ -5,7 +5,7 @@ files for a given set of volume IDs.
 # Build
 * To generate a "fat" runnable JAR  
   `sbt clean assembly`  
-  and look for it in `target/scala-2.12/` folder.
+  and look for it in `target/scala-2.13/` folder.
 
   *Note:* you can run the JAR via the usual: `java -jar JARFILE`
   

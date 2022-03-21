@@ -19,7 +19,7 @@ import scala.util.Try
 
 object Main extends App {
 
-  case class Config(volumes: TraversableOnce[String], scriptFile: File, datasetName: String, format: String)
+  case class Config(volumes: IterableOnce[String], scriptFile: File, datasetName: String, format: String)
 
   def loadConfiguration(configFile: String): Try[Config] = Try {
     val props = new Properties()
@@ -33,10 +33,11 @@ object Main extends App {
     )
   }
 
-  def generateRsyncScript(volIds: TraversableOnce[String], dataset: String, format: HtrcVolumeId => String): String = {
+  def generateRsyncScript(volIds: IterableOnce[String], dataset: String, format: HtrcVolumeId => String): String = {
     // convert the volume ID list to EF paths
-    val volPaths = volIds.toSet[String]
-      .map(HtrcVolumeId.parseUnclean(_).get)
+    @SuppressWarnings(Array("org.wartremover.warts.TryPartial"))
+    val volPaths = volIds.iterator.to(Set)
+      .map(id => HtrcVolumeId.parseUnclean(id).get)
       .map(format)
       .mkString("\n")
 
@@ -77,11 +78,12 @@ object Main extends App {
 
   // get configuration either from the 'collection.properties' file (if no command line argument
   // is provided), or from the command line
+  @SuppressWarnings(Array("org.wartremover.warts.TryPartial"))
   val config =
     if (args.isEmpty)
       loadConfiguration("collection.properties").get
     else {
-      val conf = new Conf(args)
+      val conf = new Conf(args.toIndexedSeq)
       val outputFile = conf.outputFile()
       val format = conf.outputFormat()
       val datasetName = conf.datasetName()
