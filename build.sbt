@@ -64,6 +64,7 @@ lazy val `rsync-generator` = (project in file("."))
     libraryDependencies ++= Seq(
       "org.hathitrust.htrc"           %% "data-model"           % "2.13",
       "org.hathitrust.htrc"           %% "scala-utils"          % "2.13",
+      "com.typesafe.play"             %% "play-json"            % "2.9.2",
       "org.rogach"                    %% "scallop"              % "4.1.0",
       "org.scalatest"                 %% "scalatest"            % "3.2.11"      % Test
     ),
