@@ -68,5 +68,9 @@ lazy val `rsync-generator` = (project in file("."))
       "org.rogach"                    %% "scallop"              % "4.1.0",
       "org.scalatest"                 %% "scalatest"            % "3.2.11"      % Test
     ),
-    assembly / assemblyJarName := s"${name.value}-${version.value}.jar"
+    assembly / assemblyJarName := s"${name.value}-${version.value}.jar",
+    assembly / assemblyMergeStrategy := {
+      case PathList("META-INF", _ @ _*) => MergeStrategy.discard
+      case _ => MergeStrategy.first
+    }
   )
