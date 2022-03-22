@@ -171,6 +171,7 @@ class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
 
   val datasetsRegistry: ScallopOption[URL] = opt[URL]("registry",
     descr = "The dataset registry URL",
+    argName = "URL",
     default = Some(new URL(DEFAULT_DATASETS_REGISTRY))
   )
 
@@ -182,7 +183,8 @@ class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
 
   val datasetName: ScallopOption[String] = opt[String]("dataset",
     descr = "The name of the dataset to rsync from",
-    required = true
+    required = true,
+    argName = "NAME"
   )
 
   val htids: ScallopOption[File] = trailArg[File]("ids",

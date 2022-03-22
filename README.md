@@ -24,28 +24,28 @@ The rsync generator tool can be configured to run in two ways:
   `collection.properties` exists in the current folder, containing configuration information.
 
   *Example configuration file*:
-  ```
+```
   collectionLocation = workset_ids.txt
   outputDir = /tmp/files
   outputFile = EF_Rsync.sh
   dataset = features-2018.01
-  ```
+  datasetsRegistry = ...location URL of the datasets registry...  (optional)
+```
 
   With this configuration file, the tool generates a script file called `EF_Rsync.sh` that 
   can be found in the folder `/tmp/files/`
   
 * Using command line arguments
   
-  ```
+```
 rsync-generator
-HathiTrust Research Center
-  -d, --dataset  <arg>   The name of the dataset to rsync from
-  -f, --format  <arg>    The output format (one of 'pairtree' or 'stubby')
-  -o, --output  <FILE>   Writes the generated rsync script to FILE
-  -h, --help             Show help message
-  -v, --version          Show version of this program
+  -d, --dataset  <NAME>   The name of the dataset to rsync from
+  -o, --output  <FILE>    Writes the generated rsync script to FILE
+  -r, --registry  <URL>   The dataset registry URL
+  -h, --help              Show help message
+  -v, --version           Show version of this program
 
  trailing arguments:
   ids (not required)   The file containing the list of HT IDs to rsync (if
                        omitted, will read from stdin)
-  ```
+```
