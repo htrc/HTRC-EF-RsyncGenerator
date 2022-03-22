@@ -29,7 +29,6 @@ The rsync generator tool can be configured to run in two ways:
   outputDir = /tmp/files
   outputFile = EF_Rsync.sh
   dataset = features-2018.01
-  format = pairtree
   ```
 
   With this configuration file, the tool generates a script file called `EF_Rsync.sh` that 
